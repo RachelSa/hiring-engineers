@@ -12,11 +12,11 @@
     - this-other-tag
   ```
   2. Navigate to the [Host Map](https://app.datadoghq.com/infrastructure/map) on the Datadog dashboard to see the Agent with its associated tags.
-  IMAGE  
+  ![agent with tags](https://media.giphy.com/media/4EES9kA7cfxrrXGXfU/giphy.gif) 
 
 ## Install MongoDB and Datadog MongoDB Integration - steps to reproduce
   1. Install [MongoDB for Ubuntu](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/). Run `sudo service mongodb start` to start the service and `mongo` to open a Mongo shell.
-  2. In the shell, switch to admin `use admin` and set read-only Datatdog user per Datadog [integrations instructions](https://app.datadoghq.com/account/settings#integrations/mongodb). Close the shell.
+  2. In the shell, switch to admin `use admin` and create the read-only Datatdog user per Datadog [integrations instructions](https://app.datadoghq.com/account/settings#integrations/mongodb). Close the shell.
   3. In `/etc/datadog-agent/conf.d/mongo.d/mongo.yaml` set the configurations per Datadog [integrations instructions](https://app.datadoghq.com/account/settings#integrations/mongodb).
   4. Stop (`sudo service datadog-agent stop`) and restart (`sudo service datadog-agent start`) the Datadog agent.
 
