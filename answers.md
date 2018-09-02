@@ -23,19 +23,20 @@
     - this-tag
     - this-other-tag
   ```
-  2. Navigate to the [Host Map](https://app.datadoghq.com/infrastructure/map) on the Datadog dashboard to see the Agent with its associated tags.
+  2. Stop (`sudo service datadog-agent stop`) and restart (`sudo service datadog-agent start`) the Datadog agent.
+  3. Navigate to the [Host Map](https://app.datadoghq.com/infrastructure/map) on the Datadog dashboard to see the Agent with its associated tags.
   ![agent with tags](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/vm-tag.png)
 
 ## Install MongoDB and Datadog Integration
 ### steps to reproduce
   1. Install [MongoDB for Ubuntu](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/). Run `sudo service mongodb start` to start the service and `mongo` to open a Mongo shell.
-  2. In the shell, switch to admin `use admin` and create the read-only Datatdog user per Datadog [integrations instructions](https://app.datadoghq.com/account/settings#integrations/mongodb). Close the shell.
+  2. In the shell, switch to admin `use admin` and create the read-only Datatdog user per Datadog [integrations instructions](https://app.datadoghq.com/account/settings#integrations/mongodb).
   3. In `/etc/datadog-agent/conf.d/mongo.d/mongo.yaml` set the configurations per Datadog [integrations instructions](https://app.datadoghq.com/account/settings#integrations/mongodb).
   4. Stop (`sudo service datadog-agent stop`) and restart (`sudo service datadog-agent start`) the Datadog agent.
 
 ## Collect Custom Agent Metrics
 ### steps to reproduce
-  1. In `/etc/datadog-agent/checks.d/my-metric.py`, add the implementation for a metric to be generated. In this case, the metric generated is just a random number between 0 and 1000.
+  1. In `/etc/datadog-agent/checks.d/my-metric.py` add the implementation for a metric to be generated. In this case, the metric generated is just a random number between 0 and 1000.
   ```
   from checks import AgentCheck
   import random
@@ -44,7 +45,7 @@
       def check(self, instance):
           self.gauge('my_metric', random.randint(0, 1000))
   ```
-The custom check inherits from Datadog's AgentCheck, which requires the `check()` method, and takes in an instance argument. The AgentCheck's `.gauge` method is used to record the current value of a metric.
+The custom check inherits from Datadog's AgentCheck, which requires the `check()` method. The AgentCheck's `.gauge` method is used to record the current value of a metric.
 
   2. In the `/etc/datadog-agent/conf.d/my_metric.yaml` file, add the following configuration:
   ```
@@ -53,7 +54,7 @@ The custom check inherits from Datadog's AgentCheck, which requires the `check()
   instances:
     - min_collection_interval: 45
   ```
-  Here, one instance is set, meaning that the check() in `my-metric.py` will run once.
+  Here, one instance is set, meaning that the check() in `my-metric.py` will run once per collection.
 
   **Bonus -** The instances section sets the collection interval to 45 seconds. This means that each time the Agent's collector runs, it will check to see if 45 seconds or more have passed since this metric was last checked. If so, the custom check will be run.
 
@@ -71,7 +72,11 @@ include script
 **Bonus - What is the Anomaly graph displaying?**
 
 # Blog
-##
+## A Quickstart for Metrics Collection: The datadog-metrics Node Package
+Created by Datadog community member Daniel Bader the [datadog-metrics package](https://www.npmjs.com/package/datadog-metrics) provides a quick and easy setup for collecting metrics through Datadog's API.
+
+There's no need to set up a Datadog agent to get started. Datadog users can simply install the Node package `npm i datadog-metrics` and create a JavaScript file to configure the metric collection.
+
 
 ## Reference
 - **Vagrant**: open-source software used for maintaining virtual environments, such as Virtual Box.
