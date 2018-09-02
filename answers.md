@@ -1,7 +1,7 @@
 # Technical Writer Code Challenge
 
 ## Contents
- - [Environment Setup](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md# Environment Setup - steps to reproduce)
+ - [Environment Setup](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#Environment)
  - [Add Tags to the Datadog Agent]()
  - [Install MongoDB and Datadog MongoDB Integration]()
  - [Collect Custom Agent Metrics]()
@@ -22,6 +22,7 @@
     - this-other-tag
   ```
   2. Navigate to the [Host Map](https://app.datadoghq.com/infrastructure/map) on the Datadog dashboard to see the Agent with its associated tags.
+  ![agent with tags](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/vm-tag.png)
 
 ## Install MongoDB and Datadog MongoDB Integration - steps to reproduce
   1. Install [MongoDB for Ubuntu](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/). Run `sudo service mongodb start` to start the service and `mongo` to open a Mongo shell.
