@@ -73,10 +73,23 @@ include script
 
 # Blog
 ## A Quickstart for Metrics Collection: The datadog-metrics Node Package
-Created by Datadog community member Daniel Bader the [datadog-metrics package](https://www.npmjs.com/package/datadog-metrics) provides a quick and easy setup for collecting metrics through Datadog's API.
+Created by Datadog community member Daniel Bader the [datadog-metrics package](https://www.npmjs.com/package/datadog-metrics) provides a quick and easy setup for reporting metrics through a Node application to Datadog's API.
+
+The datadoog-metrics package provides:
+ - A Node.js interface for reporting Metrics
+ - 
 
 There's no need to set up a Datadog agent to get started. Datadog users can simply install the Node package `npm i datadog-metrics` and create a JavaScript file to configure the metric collection.
 
+```
+add example
+```
+Run the following command will start the metrics collection:
+`DATADOG_API_KEY=YOUR_KEY DEBUG=metrics node example_app.js`
+
+Include your API key, which is generated when you create a Datadog account and can be found in Integrations >> APIs.
+
+Check the Datadog Metrics Explorer to see the new metrics being reported.
 
 ## Reference
 - **Vagrant**: open-source software used for maintaining virtual environments, such as Virtual Box.
