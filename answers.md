@@ -35,7 +35,7 @@
 
 ## Collect Custom Agent Metrics
 ### steps to reproduce
-  1. In '/etc/datadog-agent/checks.d/my-metric.py`, add the implementation for a metric to be generated. In this case, the metric to be collected is simply a random number.
+  1. In `/etc/datadog-agent/checks.d/my-metric.py`, add the implementation for a metric to be generated. In this case, the metric generated is just a random number between 0 and 1000.
   ```
   from checks import AgentCheck
   import random
@@ -44,6 +44,7 @@
       def check(self, instance):
           self.gauge('my_metric', random.randint(0, 1000))
   ```
+The custom check inherits from Datadog's AgentCheck, which requires the `check()` method, and takes in an instance argument. The AgentCheck's `.gauge` method is used to record the current value of a metric.
 
   2. In the `/etc/datadog-agent/conf.d/my_metric.yaml` file, add the following configuration:
   ```
@@ -54,11 +55,11 @@
   ```
   Here, one instance is set, meaning that the check() in `my-metric.py` will run once.
 
-  **Bonus - ** The instances section sets the collection interval to 45 seconds. This means that each time the Agent's collector runs, it will check to see if 45 seconds or more have passed since this metric was last checked. If so, the custom check will be run.
+  **Bonus -** The instances section sets the collection interval to 45 seconds. This means that each time the Agent's collector runs, it will check to see if 45 seconds or more have passed since this metric was last checked. If so, the custom check will be run.
 
   3. Stop (`sudo service datadog-agent stop`) and restart (`sudo service datadog-agent start`) the Datadog agent. Run `sudo -u dd-agent -- datadog-agent check my_metric` to confirm `my_metric` has been added to the collector's checks.
   4. See my_metric in the Datadog metric explorer, shown below.
-  ![my-metric in metric explorer](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/my-metric-explorer.png)
+  ![my-metric in metric explorer](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/my_metric_explorer.png)
 
 ## Create Timeboard
 ### steps to reproduce
