@@ -1,7 +1,7 @@
 # Technical Writer Code Challenge
 
 ## Contents
- - [Environment Setup](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#Environment)
+ - [Environment Setup](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#environment-setup)
  - [Add Tags to the Datadog Agent]()
  - [Install MongoDB and Datadog MongoDB Integration]()
  - [Collect Custom Agent Metrics]()
