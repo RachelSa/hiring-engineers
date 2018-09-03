@@ -65,6 +65,24 @@ The custom check inherits from Datadog's AgentCheck, which requires the `check()
 ## Create Timeboard
 ### steps to reproduce
 include script
+```
+curl  -X POST -H "Content-type: application/json" -d '{
+      "graphs" : [{
+          "title": "My Metrics + MongoDatasize Anomoly Metric",
+          "definition": {
+              "events": [],
+              "requests": [
+                  {"q": "avg:my_metric{host:precise64}"},
+                  {"q": "anomalies(avg:mongodb.stats.datasize{host:precise64},\"basic\",2)"}
+              ]
+          },
+          "viz": "timeseries"
+      }],
+      "title" : "My Timeboard",
+      "description" : "Two fun metrics in one timeboard",
+      "read_only": "True"
+}' "https://api.datadoghq.com/api/v1/dash?api_key=MY_API_KEY&application_key=MY_KEY"
+```
 
 ## Access Timeboard from Datadog UI
 ### steps to reproduce
@@ -77,7 +95,7 @@ Created by Datadog community member Daniel Bader the [datadog-metrics package](h
 
 The datadoog-metrics package provides:
  - A Node.js interface for reporting Metrics
- - 
+ -
 
 There's no need to set up a Datadog agent to get started. Datadog users can simply install the Node package `npm i datadog-metrics` and create a JavaScript file to configure the metric collection.
 
