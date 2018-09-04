@@ -92,18 +92,16 @@ The request includes two queries: one for my_metric and one showing the database
 ## A Quickstart for Metrics Collection: The datadog-metrics Node Package
 Created by Datadog community member Daniel Bader the [datadog-metrics package](https://www.npmjs.com/package/datadog-metrics) provides a quick and easy setup for reporting metrics through a Node application to Datadog's API.
 
-The datadoog-metrics package provides:
+The datadog-metrics package provides:
  - A Node.js interface for reporting metrics
  - Easy setup (no need to install the Datadog Agent)
  - Aggregation
  - Buffering (no need to send a request for each reported metric)
  - Computing histogram
 
-Start by installing the Node package `npm i datadog-metrics` and create a JavaScript file to configure the metric collection.
+To try out datadog-metrics, start by installing the Node package `npm i datadog-metrics`.
 
-The JavaScript file should intialize the metrics reporter. Optional arguments, such as host and prefix can be included in the initialization, and are described in [the source file comments](https://github.com/dbader/node-datadog-metrics/blob/master/index.js).
-
-After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are reported at five second intervals.
+Next, create a JavaScript file to configure the metric collection. Use the following code snipped as a guide:
 
 ```
 const metrics = require('datadog-metrics');
@@ -117,9 +115,12 @@ function collectStats() {
 
 setInterval(collectStats, 5000);
 ```
-Run the following command to start the metrics collection:
-`DATADOG_API_KEY=YOUR_KEY DEBUG=metrics node example_app.js`
+The file should intialize the metrics reporter. Optional initialization arguments, such as host and prefix, are described in [the source file comments](https://github.com/dbader/node-datadog-metrics/blob/master/index.js).
 
-Include your API key, which is generated when you create a Datadog account and can be found in Integrations >> APIs.
+After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are reported at five second intervals.
 
-The metric collection will be logged in the command line shell, and after a few minutes, the Datadog Metrics Explorer should display the new metrics being reported.
+Run the following command to start the metrics collection. Note that your API key can be found in Integrations >> APIs when you log on to Datadog.
+
+`DATADOG_API_KEY=YOUR_KEY DEBUG=metrics node <FILE_NAME>.js`
+
+The metric collection will begin logging, as shown below, and after a few minutes, the [Datadog Metrics Explorer](https://app.datadoghq.com/metric/summary) should display the new metrics being reported.
