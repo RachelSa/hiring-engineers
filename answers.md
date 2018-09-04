@@ -6,9 +6,7 @@
  - [Install MongoDB and Datadog Integration Integration](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#install-mongodb-and-datadog-integration)
  - [Collect Custom Agent Metrics](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#collect-custom-agent-metrics)
  - [Create Timeboard](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#create-timeboard)
- - [Access Timeboard from Datadog UI](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#access-timeboard-from-datadog-ui)
  - [Blog](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#blog)
- - [Reference](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#reference)
 
 ## Environment Setup
 ### steps to reproduce
@@ -64,7 +62,7 @@ The custom check inherits from Datadog's AgentCheck, which requires the `check()
 
 ## Create Timeboard
 ### steps to reproduce
-include script
+  1. Run the following curl request, which includes the API and application keys.
 ```
 curl  -X POST -H "Content-type: application/json" -d '{
       "graphs" : [{
@@ -83,11 +81,12 @@ curl  -X POST -H "Content-type: application/json" -d '{
       "read_only": "True"
 }' "https://api.datadoghq.com/api/v1/dash?api_key=MY_API_KEY&application_key=MY_KEY"
 ```
+The request includes two queries: one for my_metric and one showing the database datasize with the anomaly function applied. **Bonus -** The anomaly function uses time series data to detect results that fall outside of normal range (in this case, the function is set to two standard deviations.) The 'basic' argument in the anomaly function indicates that only short term behavior will be tracked (not historical trends).
 
-## Access Timeboard from Datadog UI
-### steps to reproduce
-
-**Bonus - What is the Anomaly graph displaying?**
+ This means that if I add data to my database, the next size query will fall outside of normal range. The image below shows this anomaly detection:
+![my-metric in metric explorer](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/my_timeseries.png)
+  2. With the Timeboard displayed in the Datadog UI, select a five minute range on the timeline. Click the snapshot button and include an @user comment to send a snapshot notification.
+  ![my-metric in metric explorer](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/timeboard_email.png)
 
 # Blog
 ## A Quickstart for Metrics Collection: The datadog-metrics Node Package
@@ -108,7 +107,3 @@ Run the following command will start the metrics collection:
 Include your API key, which is generated when you create a Datadog account and can be found in Integrations >> APIs.
 
 Check the Datadog Metrics Explorer to see the new metrics being reported.
-
-## Reference
-- **Vagrant**: open-source software used for maintaining virtual environments, such as Virtual Box.
-- **Virtual Box**: open-source product used to create and run a virtual machine.
