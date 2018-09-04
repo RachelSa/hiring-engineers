@@ -83,7 +83,7 @@ curl  -X POST -H "Content-type: application/json" -d '{
 ```
 The request includes two queries: one for my_metric and one showing the database datasize with the anomaly function applied. **Bonus -** The anomaly function uses time series data to detect results that fall outside of normal range (in this case, the function is set to two standard deviations.) The 'basic' argument in the anomaly function indicates that only short term behavior will be tracked (not historical trends).
 
- This means that if I add data to my database, the next size query will fall outside of normal range. The image below shows this anomaly detection:
+ This means that if data is added to the database, the next size query will fall outside of normal range. The image below shows anomaly detection of the database data size change:
 ![my-metric in metric explorer](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/my_timeseries.png)
   2. With the Timeboard displayed in the Datadog UI, select a five minute range on the timeline. Click the snapshot button and include an @user comment to send a snapshot notification.
   ![my-metric in metric explorer](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/timeboard_email.png)
@@ -93,17 +93,33 @@ The request includes two queries: one for my_metric and one showing the database
 Created by Datadog community member Daniel Bader the [datadog-metrics package](https://www.npmjs.com/package/datadog-metrics) provides a quick and easy setup for reporting metrics through a Node application to Datadog's API.
 
 The datadoog-metrics package provides:
- - A Node.js interface for reporting Metrics
- -
+ - A Node.js interface for reporting metrics
+ - Easy setup (no need to install the Datadog Agent)
+ - Aggregation
+ - Buffering (no need to send a request for each reported metric)
+ - Computing histogram
 
-There's no need to set up a Datadog agent to get started. Datadog users can simply install the Node package `npm i datadog-metrics` and create a JavaScript file to configure the metric collection.
+Start by installing the Node package `npm i datadog-metrics` and create a JavaScript file to configure the metric collection.
+
+The JavaScript file should intialize the metrics reporter. Optional arguments, such as host and prefix can be included in the initialization, and are described in [the source file comments](https://github.com/dbader/node-datadog-metrics/blob/master/index.js).
+
+After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are reported at five second intervals.
 
 ```
-add example
+const metrics = require('datadog-metrics');
+metrics.init({ host:'precise64', prefix: 'myapp.' });
+
+function collectStats() {
+    const memUsage = process.memoryUsage();
+    metrics.gauge('just.five', 5);
+    metrics.gauge('memory.heapTotal', memUsage.heapTotal);
+}
+
+setInterval(collectStats, 5000);
 ```
-Run the following command will start the metrics collection:
+Run the following command to start the metrics collection:
 `DATADOG_API_KEY=YOUR_KEY DEBUG=metrics node example_app.js`
 
 Include your API key, which is generated when you create a Datadog account and can be found in Integrations >> APIs.
 
-Check the Datadog Metrics Explorer to see the new metrics being reported.
+The metric collection will be logged in the command line shell, and after a few minutes, the Datadog Metrics Explorer should display the new metrics being reported.
