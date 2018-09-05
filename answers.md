@@ -94,10 +94,11 @@ Created by Datadog community member Daniel Bader the [datadog-metrics package](h
 
 The datadog-metrics package provides:
  - A Node.js interface for reporting metrics
- - Easy setup (no need to install the Datadog Agent)
- - Aggregation
+ - Easy setup (no need to install a Datadog Agent)
+ - Aggregation (run multiple metrics, and have datadog-metrics aggregate by key and tag)
  - Buffering (no need to send a request for each reported metric)
- - Computing histogram
+ - Histogram metrics calculation and reporting (call `histogram()` with a key and value, and have datadog-metrics calculate histogram metrics to send to Datadog)
+ - Gauge and counter metrics reporting
 
 ### Install and Config
 To try out datadog-metrics, start by installing the Node package `npm i datadog-metrics`.
@@ -116,18 +117,23 @@ function collectStats() {
 
 setInterval(collectStats, 5000);
 ```
-Optionally, start by initializing the metrics collection, as shown above. Initialization arguments, such as host and prefix, are described in [package README](https://github.com/dbader/node-datadog-metrics).
+Optionally, start by initializing the metrics collection, as shown above. Initialization properties, such as host and prefix, are described in the [package README](https://github.com/dbader/node-datadog-metrics).
 
-After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are reported at five second intervals. Aside from gauge which reports a metric's current value, datadog-metrics, also supports counter (increment a given value) and histogram metrics. See the [README](https://github.com/dbader/node-datadog-metrics)) for more details.
+After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are reported at five second intervals. Aside from gauge which reports a metric's current value, datadog-metrics, also supports counter (increment by a given value) and histogram metrics. The histogram function calculates average, count, minimum, maximum, and percentile values. Learn more about the histogram in the source code. And read about `gauge`, `count`, and `histogram` in the package [README](https://github.com/dbader/node-datadog-metrics).
 
-Run the following command to start the metrics collection. Note that your API key can be found in Integrations >> APIs when you log on to Datadog.
+Run the following command to start the metrics collection. Note that your API key can be found in Integrations >> APIs when you log on to Datadog. DEBUG enables logging.
 
 `DATADOG_API_KEY=YOUR_KEY DEBUG=metrics node <FILE_NAME>.js`
 
-The DEBUG enables logging as metrics are collected.
+If the metric collection begins successfully, logging will begin, as shown below.
 
-If the metric collection begins successfully, logging will begin, as shown below. After a few minutes, the [Datadog Metrics Explorer](https://app.datadoghq.com/metric/summary) should display the new metrics being reported.
+![datadog-metrics logging](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/blog_metrics.png)
+
+After a few minutes, the [Datadog Metrics Explorer](https://app.datadoghq.com/metric/summary) should display the new metrics being reported.
+
+![metrics explorer](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/just.five.png)
 
 ### Additional Features
- - The datadog-metrics package can also flush, or send buffered metrics to Datadog, using the `metrics.flush([onSuccess[, onError]])` function.
- - BufferedMetricsLogger
+ - The datadog-metrics package also flushes, or sends buffered metrics to Datadog, using the `metrics.flush([onSuccess[, onError]])` function. By default, the metric collection will be flushed every 15 seconds, though `.flush()` can also be invoked anytime you need metrics to be sent.
+ - When each metric is run, datadog-metrics initializes a new instance of `BufferedMetricsLogger` with default or null properties if none are set. For maximum customization, you can create your own instances of `BufferedMetricsLogger` and set properties (apiKey, appKey, host, prefix, defaultTags, flushIntervalSeconds) as needed.
+ - Looking to see more specifics about how datadog-metrics works? [Test files](https://github.com/dbader/node-datadog-metrics/tree/master/test) in the package source code are a great way to find out more about expected inputs and outputs for the metrics, loggers, and aggregators functions.
