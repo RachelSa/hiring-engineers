@@ -1,7 +1,7 @@
 # Technical Writer Code Challenge
 
 ## Contents
- - [Environment](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#environmen)
+ - [Environment](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#environment)
  - [Add Tags to the Datadog Agent](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#add-tags-to-the-datadog-agent)
  - [Install MongoDB and the Datadog Integration](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#install-mongodb-and-the-datadog-integration)
  - [Collect Custom Agent Metrics](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#collect-custom-agent-metrics)
@@ -79,7 +79,7 @@ curl  -X POST -H "Content-type: application/json" -d '{
       "read_only": "True"
 }' "https://api.datadoghq.com/api/v1/dash?api_key=MY_API_KEY&application_key=MY_KEY"
 ```
-The request includes two queries: one for my_metric and one showing the database datasize with the anomaly function applied. **Bonus -** The anomaly function uses time series data to detect results that fall outside of normal range (in this case, the function is set to two standard deviations.) The 'basic' argument in the anomaly function indicates that only short term behavior will be tracked (not historical trends).
+The request includes two queries: one for `my_metric` and one showing the database datasize with the anomaly function applied. **Bonus -** The anomaly function uses time series data to detect results that fall outside of normal range (in this case, the function is set to two standard deviations.) The 'basic' argument in the anomaly function indicates that only short term behavior will be tracked (not historical trends).
 
  This means that if data is added to the database, the next size query will fall outside of normal range. The image below shows anomaly detection of the database data size change:
 ![my-metric in metric explorer](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/my_timeseries.png)
@@ -95,7 +95,7 @@ The datadog-metrics package provides:
  - Easy setup - no need to install a Datadog agent
  - Aggregation - run multiple metrics, and have datadog-metrics aggregate by key and tag
  - Buffering - no need to send a request for each reported metric
- - Histogram metrics calculation and reporting (call `histogram()` with a key and value, and have datadog-metrics calculate histogram metrics to send to Datadog
+ - Histogram metrics calculation and reporting - call `histogram()` with a key and value, and have datadog-metrics calculate histogram metrics to send to Datadog
  - Gauge and counter metrics reporting
 
 ### Install and Config
@@ -117,9 +117,9 @@ setInterval(collectStats, 5000);
 ```
 Optionally, start by initializing the metrics collection, as shown above. Initialization properties, such as host and prefix, are described in the [package README](https://github.com/dbader/node-datadog-metrics).
 
-After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are run at five second intervals. Aside from `gauge()`, which reports a metric's current value, datadog-metrics, also supports counter (increment by a given value) and histogram metrics. Histogram calculates average, count, minimum, maximum, and percentile values. See how the histogram calculation works in the [source code](https://github.com/dbader/node-datadog-metrics/blob/master/lib/metrics.js). And read about `gauge()`, `count()`, and `histogram()` in the [package README](https://github.com/dbader/node-datadog-metrics).
+After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are run at five second intervals. Aside from `gauge()`, which reports a metric's current value, datadog-metrics, also supports counter (increment by a given value) and histogram metrics. Histogram calculates average, count, minimum, maximum, and percentile values. See how the histogram calculation works in the [source code](https://github.com/dbader/node-datadog-metrics/blob/master/lib/metrics.js), and read about `gauge()`, `count()`, and `histogram()` in the [package README](https://github.com/dbader/node-datadog-metrics).
 
-Run the following command to start the metrics collection. Note that your API key can be found in `Integrations >> APIs` when you log on to Datadog. DEBUG enables logging.
+Run the following command to start the metrics collection. Note that your API key can be found in `Integrations >> APIs` when you log on to Datadog. Also note that DEBUG enables logging.
 
 `DATADOG_API_KEY=<YOUR_KEY> DEBUG=metrics node <FILE_NAME>.js`
 
@@ -132,7 +132,7 @@ After a few minutes, the [Datadog Metrics Explorer](https://app.datadoghq.com/me
 ![metrics explorer](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/just.five.png)
 
 ### Additional Features
- - The datadog-metrics package also flushes, or sends buffered metrics to Datadog, using the `metrics.flush([onSuccess[, onError]])` function. By default, the metric collection will be flushed every 15 seconds, though `flush()` can also be invoked anytime you need metrics to be sent.
+ - The datadog-metrics package also flushes, or sends buffered metrics to Datadog, using the `metrics.flush([onSuccess[, onError]])` function. By default, the metric collection will be flushed every 15 seconds, though `flush()` can also be invoked any time you need metrics to be sent.
  - When each metric is run, datadog-metrics initializes a new instance of `BufferedMetricsLogger` with default or null properties if none are set. For maximum customization, you can create your own instances of `BufferedMetricsLogger` and set properties (apiKey, appKey, host, prefix, defaultTags, flushIntervalSeconds) as needed.
  - Looking to see more specifics about how datadog-metrics works? [Test files](https://github.com/dbader/node-datadog-metrics/tree/master/test) in the package source code are a great way to find out more about expected inputs and outputs for the metrics, logger, and aggregator functions.
 
