@@ -3,9 +3,9 @@
 ## Contents
  - [Environment](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#environmen)
  - [Add Tags to the Datadog Agent](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#add-tags-to-the-datadog-agent)
- - [Install MongoDB and Datadog Integration](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#install-mongodb-and-datadog-integration)
+ - [Install MongoDB and the Datadog Integration](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#install-mongodb-and-the-datadog-integration)
  - [Collect Custom Agent Metrics](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#collect-custom-agent-metrics)
- - [Create Timeboard](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#create-timeboard)
+ - [Create a Timeboard](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#create-a-timeboard)
  - [Blog](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#blog)
 
 ## Environment
@@ -23,10 +23,10 @@
   3. Navigate to the [Host Map](https://app.datadoghq.com/infrastructure/map) on the Datadog dashboard to see the agent with its associated tags.
   ![agent with tags](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/vm-tag.png)
 
-## Install MongoDB and Datadog Integration
+## Install MongoDB and the Datadog Integration
 ### steps to reproduce
   1. Install [MongoDB for Ubuntu](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/). Run `sudo service mongodb start` to start the service and `mongo` to open a Mongo shell.
-  2. In the shell, switch to admin `use admin` and create the read-only Datatdog user per Datadog [integrations instructions](https://app.datadoghq.com/account/settings#integrations/mongodb).
+  2. In the shell, switch to admin (`use admin`) and create the read-only Datatdog user per Datadog [integrations instructions](https://app.datadoghq.com/account/settings#integrations/mongodb).
   3. In `/etc/datadog-agent/conf.d/mongo.d/mongo.yaml` set the configurations per Datadog [integrations instructions](https://app.datadoghq.com/account/settings#integrations/mongodb).
   4. Stop (`sudo service datadog-agent stop`) and restart (`sudo service datadog-agent start`) the Datadog agent.
 
@@ -55,10 +55,10 @@ The custom check inherits from Datadog's AgentCheck, which requires the `check()
   **Bonus -** The instances section sets the collection interval to 45 seconds. This means that each time the agent's collector runs, it will check to see if 45 seconds or more have passed since this metric was last checked. If so, the custom check will be run.
 
   3. Stop (`sudo service datadog-agent stop`) and restart (`sudo service datadog-agent start`) the Datadog agent. Run `sudo -u dd-agent -- datadog-agent check my_metric` to confirm `my_metric` has been added to the collector's checks.
-  4. See my_metric in the Datadog metric explorer, shown below.
+  4. See `my_metric` in the Datadog metric explorer, shown below.
   ![my-metric in metric explorer](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/my_metric_explorer.png)
 
-## Create Timeboard
+## Create a Timeboard
 ### steps to reproduce
   1. Run the following curl request, which includes API and application keys.
 ```
@@ -88,14 +88,14 @@ The request includes two queries: one for my_metric and one showing the database
 
 # Blog
 ## A Quickstart for Metrics Collection: The datadog-metrics Node Package
-Created by Datadog community member Daniel Bader the [datadog-metrics package](https://www.npmjs.com/package/datadog-metrics) provides a quick and easy setup for reporting metrics through a Node application to Datadog's API.
+Created by Datadog community member Daniel Bader the [datadog-metrics package](https://www.npmjs.com/package/datadog-metrics) provides quick and easy setup for reporting metrics through a Node application to Datadog's API.
 
 The datadog-metrics package provides:
  - A Node.js interface for reporting metrics
- - Easy setup (no need to install a Datadog Agent)
- - Aggregation (run multiple metrics, and have datadog-metrics aggregate by key and tag)
- - Buffering (no need to send a request for each reported metric)
- - Histogram metrics calculation and reporting (call `histogram()` with a key and value, and have datadog-metrics calculate histogram metrics to send to Datadog)
+ - Easy setup - no need to install a Datadog agent
+ - Aggregation - run multiple metrics, and have datadog-metrics aggregate by key and tag
+ - Buffering - no need to send a request for each reported metric
+ - Histogram metrics calculation and reporting (call `histogram()` with a key and value, and have datadog-metrics calculate histogram metrics to send to Datadog
  - Gauge and counter metrics reporting
 
 ### Install and Config
@@ -117,11 +117,11 @@ setInterval(collectStats, 5000);
 ```
 Optionally, start by initializing the metrics collection, as shown above. Initialization properties, such as host and prefix, are described in the [package README](https://github.com/dbader/node-datadog-metrics).
 
-After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are run at five second intervals. Aside from gauge which reports a metric's current value, datadog-metrics, also supports counter (increment by a given value) and histogram metrics. Histogram calculates average, count, minimum, maximum, and percentile values. See how the histogram calculation works in the [source code](https://github.com/dbader/node-datadog-metrics/blob/master/lib/metrics.js). And read about `gauge`, `count`, and `histogram` in the [package README](https://github.com/dbader/node-datadog-metrics).
+After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are run at five second intervals. Aside from `gauge()`, which reports a metric's current value, datadog-metrics, also supports counter (increment by a given value) and histogram metrics. Histogram calculates average, count, minimum, maximum, and percentile values. See how the histogram calculation works in the [source code](https://github.com/dbader/node-datadog-metrics/blob/master/lib/metrics.js). And read about `gauge()`, `count()`, and `histogram()` in the [package README](https://github.com/dbader/node-datadog-metrics).
 
 Run the following command to start the metrics collection. Note that your API key can be found in `Integrations >> APIs` when you log on to Datadog. DEBUG enables logging.
 
-`DATADOG_API_KEY=YOUR_KEY DEBUG=metrics node <FILE_NAME>.js`
+`DATADOG_API_KEY=<YOUR_KEY> DEBUG=metrics node <FILE_NAME>.js`
 
 If the metric collection begins successfully, logging will begin, as shown below.
 
@@ -132,8 +132,8 @@ After a few minutes, the [Datadog Metrics Explorer](https://app.datadoghq.com/me
 ![metrics explorer](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/just.five.png)
 
 ### Additional Features
- - The datadog-metrics package also flushes, or sends buffered metrics to Datadog, using the `metrics.flush([onSuccess[, onError]])` function. By default, the metric collection will be flushed every 15 seconds, though `.flush()` can also be invoked anytime you need metrics to be sent.
+ - The datadog-metrics package also flushes, or sends buffered metrics to Datadog, using the `metrics.flush([onSuccess[, onError]])` function. By default, the metric collection will be flushed every 15 seconds, though `flush()` can also be invoked anytime you need metrics to be sent.
  - When each metric is run, datadog-metrics initializes a new instance of `BufferedMetricsLogger` with default or null properties if none are set. For maximum customization, you can create your own instances of `BufferedMetricsLogger` and set properties (apiKey, appKey, host, prefix, defaultTags, flushIntervalSeconds) as needed.
- - Looking to see more specifics about how datadog-metrics works? [Test files](https://github.com/dbader/node-datadog-metrics/tree/master/test) in the package source code are a great way to find out more about expected inputs and outputs for the metrics, loggers, and aggregators functions.
+ - Looking to see more specifics about how datadog-metrics works? [Test files](https://github.com/dbader/node-datadog-metrics/tree/master/test) in the package source code are a great way to find out more about expected inputs and outputs for the metrics, logger, and aggregator functions.
 
- With commented source code, tests, and detailed documentation, datadog-metrics is a Node user-friendly quickstart to metrics reporting!
+ With commented source code, tests, and detailed documentation, datadog-metrics is a Node-user-friendly quickstart to metrics reporting!
