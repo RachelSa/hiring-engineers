@@ -1,17 +1,15 @@
 # Technical Writer Code Challenge
 
 ## Contents
- - [Environment Setup](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#environment-setup)
+ - [Environment](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#environmen)
  - [Add Tags to the Datadog Agent](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#add-tags-to-the-datadog-agent)
- - [Install MongoDB and Datadog Integration Integration](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#install-mongodb-and-datadog-integration)
+ - [Install MongoDB and Datadog Integration](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#install-mongodb-and-datadog-integration)
  - [Collect Custom Agent Metrics](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#collect-custom-agent-metrics)
  - [Create Timeboard](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#create-timeboard)
  - [Blog](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/answers.md#blog)
 
-## Environment Setup
-### steps to reproduce
-  1. To install the Datadog Agent to a VM, first [install **Vagrant**](https://www.vagrantup.com/intro/getting-started/) and [**Virtual Box**](https://www.virtualbox.org/). Use the [Vagrant getting started guide](https://www.vagrantup.com/intro/getting-started/) to initialize, start, and SSH into an Ubuntu 12.04 VM.
-  2. Use Datadog's [one-step Ubuntu Agent installation](https://app.datadoghq.com/account/settings#agent/ubuntu) to add the agent to the Ubuntu VM.
+## Environment
+  Ubuntu 12.04 VM, set up using [Vagrant](https://www.vagrantup.com/intro/getting-started/) and [Virtual Box](https://www.virtualbox.org/).
 
 ## Add Tags to the Datadog Agent
 ### steps to reproduce
@@ -22,7 +20,7 @@
     - this-other-tag
   ```
   2. Stop (`sudo service datadog-agent stop`) and restart (`sudo service datadog-agent start`) the Datadog agent.
-  3. Navigate to the [Host Map](https://app.datadoghq.com/infrastructure/map) on the Datadog dashboard to see the Agent with its associated tags.
+  3. Navigate to the [Host Map](https://app.datadoghq.com/infrastructure/map) on the Datadog dashboard to see the agent with its associated tags.
   ![agent with tags](https://github.com/RachelSa/hiring-engineers/blob/tech-writer/images/vm-tag.png)
 
 ## Install MongoDB and Datadog Integration
@@ -43,7 +41,7 @@
       def check(self, instance):
           self.gauge('my_metric', random.randint(0, 1000))
   ```
-The custom check inherits from Datadog's AgentCheck, which requires the `check()` method. The AgentCheck's `.gauge` method is used to record the current value of a metric.
+The custom check inherits from Datadog's AgentCheck, which requires the `check()` method. The AgentCheck's `gauge()` method is used to record the current value of a metric.
 
   2. In the `/etc/datadog-agent/conf.d/my_metric.yaml` file, add the following configuration:
   ```
@@ -52,9 +50,9 @@ The custom check inherits from Datadog's AgentCheck, which requires the `check()
   instances:
     - min_collection_interval: 45
   ```
-  Here, one instance is set, meaning that the check() in `my-metric.py` will run once per collection.
+  Here, one instance is set, meaning that the `check()` in `my-metric.py` will run once per collection.
 
-  **Bonus -** The instances section sets the collection interval to 45 seconds. This means that each time the Agent's collector runs, it will check to see if 45 seconds or more have passed since this metric was last checked. If so, the custom check will be run.
+  **Bonus -** The instances section sets the collection interval to 45 seconds. This means that each time the agent's collector runs, it will check to see if 45 seconds or more have passed since this metric was last checked. If so, the custom check will be run.
 
   3. Stop (`sudo service datadog-agent stop`) and restart (`sudo service datadog-agent start`) the Datadog agent. Run `sudo -u dd-agent -- datadog-agent check my_metric` to confirm `my_metric` has been added to the collector's checks.
   4. See my_metric in the Datadog metric explorer, shown below.
@@ -62,7 +60,7 @@ The custom check inherits from Datadog's AgentCheck, which requires the `check()
 
 ## Create Timeboard
 ### steps to reproduce
-  1. Run the following curl request, which includes the API and application keys.
+  1. Run the following curl request, which includes API and application keys.
 ```
 curl  -X POST -H "Content-type: application/json" -d '{
       "graphs" : [{
@@ -119,9 +117,9 @@ setInterval(collectStats, 5000);
 ```
 Optionally, start by initializing the metrics collection, as shown above. Initialization properties, such as host and prefix, are described in the [package README](https://github.com/dbader/node-datadog-metrics).
 
-After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are reported at five second intervals. Aside from gauge which reports a metric's current value, datadog-metrics, also supports counter (increment by a given value) and histogram metrics. The histogram function calculates average, count, minimum, maximum, and percentile values. Learn more about the histogram in the source code. And read about `gauge`, `count`, and `histogram` in the package [README](https://github.com/dbader/node-datadog-metrics).
+After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are run at five second intervals. Aside from gauge which reports a metric's current value, datadog-metrics, also supports counter (increment by a given value) and histogram metrics. Histogram calculates average, count, minimum, maximum, and percentile values. See how the histogram calculation works in the [source code](https://github.com/dbader/node-datadog-metrics/blob/master/lib/metrics.js). And read about `gauge`, `count`, and `histogram` in the [package README](https://github.com/dbader/node-datadog-metrics).
 
-Run the following command to start the metrics collection. Note that your API key can be found in Integrations >> APIs when you log on to Datadog. DEBUG enables logging.
+Run the following command to start the metrics collection. Note that your API key can be found in `Integrations >> APIs` when you log on to Datadog. DEBUG enables logging.
 
 `DATADOG_API_KEY=YOUR_KEY DEBUG=metrics node <FILE_NAME>.js`
 
@@ -137,3 +135,5 @@ After a few minutes, the [Datadog Metrics Explorer](https://app.datadoghq.com/me
  - The datadog-metrics package also flushes, or sends buffered metrics to Datadog, using the `metrics.flush([onSuccess[, onError]])` function. By default, the metric collection will be flushed every 15 seconds, though `.flush()` can also be invoked anytime you need metrics to be sent.
  - When each metric is run, datadog-metrics initializes a new instance of `BufferedMetricsLogger` with default or null properties if none are set. For maximum customization, you can create your own instances of `BufferedMetricsLogger` and set properties (apiKey, appKey, host, prefix, defaultTags, flushIntervalSeconds) as needed.
  - Looking to see more specifics about how datadog-metrics works? [Test files](https://github.com/dbader/node-datadog-metrics/tree/master/test) in the package source code are a great way to find out more about expected inputs and outputs for the metrics, loggers, and aggregators functions.
+
+ With commented source code, tests, and detailed documentation, datadog-metrics is a Node user-friendly quickstart to metrics reporting!
