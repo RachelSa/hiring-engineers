@@ -99,9 +99,10 @@ The datadog-metrics package provides:
  - Buffering (no need to send a request for each reported metric)
  - Computing histogram
 
+### Install and Config
 To try out datadog-metrics, start by installing the Node package `npm i datadog-metrics`.
 
-Next, create a JavaScript file to configure the metric collection. Use the following code snipped as a guide:
+Next, create a JavaScript file to configure the metric collection.
 
 ```
 const metrics = require('datadog-metrics');
@@ -115,12 +116,18 @@ function collectStats() {
 
 setInterval(collectStats, 5000);
 ```
-The file should intialize the metrics reporter. Optional initialization arguments, such as host and prefix, are described in [the source file comments](https://github.com/dbader/node-datadog-metrics/blob/master/index.js).
+Optionally, start by initializing the metrics collection, as shown above. Initialization arguments, such as host and prefix, are described in [package README](https://github.com/dbader/node-datadog-metrics).
 
-After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are reported at five second intervals.
+After intialization, a set interval can be used to report metrics to Datadog. In the example below, the 'just.five' and 'memory.healTotal' gauge metrics are reported at five second intervals. Aside from gauge which reports a metric's current value, datadog-metrics, also supports counter (increment a given value) and histogram metrics. See the [README](https://github.com/dbader/node-datadog-metrics)) for more details.
 
 Run the following command to start the metrics collection. Note that your API key can be found in Integrations >> APIs when you log on to Datadog.
 
 `DATADOG_API_KEY=YOUR_KEY DEBUG=metrics node <FILE_NAME>.js`
 
-The metric collection will begin logging, as shown below, and after a few minutes, the [Datadog Metrics Explorer](https://app.datadoghq.com/metric/summary) should display the new metrics being reported.
+The DEBUG enables logging as metrics are collected.
+
+If the metric collection begins successfully, logging will begin, as shown below. After a few minutes, the [Datadog Metrics Explorer](https://app.datadoghq.com/metric/summary) should display the new metrics being reported.
+
+### Additional Features
+ - The datadog-metrics package can also flush, or send buffered metrics to Datadog, using the `metrics.flush([onSuccess[, onError]])` function.
+ - BufferedMetricsLogger
